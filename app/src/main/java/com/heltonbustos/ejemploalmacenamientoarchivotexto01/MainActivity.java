@@ -16,8 +16,8 @@ import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText texto;
-    Button btnGuardar;
+    EditText texto, texto2;
+    Button btnGuardar, btnGuardar2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
         texto = findViewById(R.id.txtTexto);
         btnGuardar = findViewById(R.id.btnGuardar);
+
+        texto2 = findViewById(R.id.txtTexto2);
+        btnGuardar2 = findViewById(R.id.btnGuardar2);
 
         String archivos[] = fileList();
 
@@ -49,6 +52,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        if(ArchivoExiste(archivos, "tareas2.txt")){
+            try {
+                InputStreamReader archivo = new InputStreamReader(openFileInput("tareas2.txt"));
+                BufferedReader br = new BufferedReader(archivo);
+                String linea = br.readLine();
+                String cadenaCompleta = "";
+
+                while (linea != null) {
+                    cadenaCompleta = cadenaCompleta + linea + "\n";
+                    linea = br.readLine();
+                }
+
+                br.close();
+                archivo.close();
+                texto2.setText(cadenaCompleta);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +80,26 @@ public class MainActivity extends AppCompatActivity {
 
                     OutputStreamWriter archivo =
                             new OutputStreamWriter(openFileOutput("tareas.txt", Activity.MODE_PRIVATE));
+
+                    archivo.write(textoMulti);
+                    archivo.flush();
+                    archivo.close();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                Toast.makeText(MainActivity.this, "Texto almacenado correctamente!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnGuardar2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String textoMulti = texto2.getText().toString();
+
+                    OutputStreamWriter archivo =
+                            new OutputStreamWriter(openFileOutput("tareas2.txt", Activity.MODE_PRIVATE));
 
                     archivo.write(textoMulti);
                     archivo.flush();
