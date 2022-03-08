@@ -76,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
             if (s.equals(archivos[i])){
                 return true;
             }
-            else{
-                return false;
-            }
         }
         return false;
     }
